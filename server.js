@@ -8,6 +8,7 @@ const app = Express();
 const PORT = process.env.PORT || 3000;
 app.use(Express.urlencoded({extended:true})); // Accept URL encoded data, Extended allows nested object parsing
 app.use(Express.json()); // Accept JSON type body data
+app.use(Express.static("./public"));
 
 // Links to API controllers/routes
 require("./routes/apiRoutes.js")(app);
