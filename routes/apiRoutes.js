@@ -1,42 +1,48 @@
 // Load data
 const FS = require("fs");
-const NotesDB = require("../assets/db/db.json");
+const Path = require("path");
+const NOTES_FILENAME = "db.json";
+const NOTES_PATH = Path.resolve(Path.join(__dirname, `../assets/db/${NOTES_FILENAME}`));
 
-// Prepare and send json data
-function getNotex(app){
-    app.get("/api/notes", function(req,res){
-        // Read DB and send as JSON
-    })
-}
-// Create new note, and return created note
-function postNotes(app){
-    app.post("/api/notes", function(req, res){
-        // Create and return as JSON
-    })
-}
-// Delete a note and return delete note
-function deleteNotes(app){
-    app.delete("/api/notes", function(req, res){
-        // Find, Delete, update and return as JSON
-    })
-}
 
-// Prepare and display html pages
-function showNotesPage(app){
-    app.get("/notes", function(req,res){
-        // Prepare and display notes page (notes.html)
+// This function will read & return the notes in the db.json file
+function readNotesFrom(path) {
+    let notes = [{
+        "title": "Initial Title",
+        "text": "Initial Note",
+        "date": new Date()
+    }];
+
+    // Check if file exists and create if not
+    if (!FS.existsSync(path)) {
+        // Check if path exists
+        FS.mkdirSync(path, { recursive: true });
+
+        // Initiallize with a blank note if file doesn't exist
+        FS.writeFile(path, notes, (err) => {
+            if (err) {
+                console.log(`Error:${err}`);
+            } else {
+                console.log(`Successfully generated ${path}!`);
+            }
+        });
     }
-}
-function showHomePage(app){
-    app.get("*", function(req,res){
-        // Prepare and display home page (index.html)
-    })
+
+    // read from file into js object
+    notes = FS.readFileSync(path, { encoding: "utf-8" });
+    console.log(notes);
+    return notes;
 }
 
-module.exports = {
-    getNotes(app);
-    postNotes(app);
-    deleteNotes(app);
-    showNotesPage(app);
-    showHomePage(app);
+module.exports = function (app) {
+    // API GET Requests
+    // Below code handles when users "visit" a page.
+    // In each of the below cases when a user visits a link
+    // (ex: localhost:PORT/api/admin... they are shown a JSON of the data in the table)
+    // ---------------------------------------------------------------------------
+
+    app.get("/api/notes", function (req, res) {
+        console.log(`Received ${req.method} to URI:${req.path} using /api/notes handler`);
+        res.json(readNotesFrom(NOTES_PATH));
+    });
 };

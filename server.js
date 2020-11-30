@@ -1,9 +1,11 @@
+// This file will handle initializing and starting the Express server
+
 // Dependencies & Libraries
 const Express = require("express");
 
 // Initialize Express
 const app = Express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 app.use(Express.urlencoded({extended:true})); // Accept URL encoded data, Extended allows nested object parsing
 app.use(Express.json()); // Accept JSON type body data
 
