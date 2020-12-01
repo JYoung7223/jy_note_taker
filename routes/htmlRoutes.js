@@ -14,13 +14,11 @@ module.exports = function(app) {
   // In each of the below cases the user is shown an HTML page of content
   // ---------------------------------------------------------------------------
 
-  app.get("/notes.html", function(req, res) {
-    console.log(`Received ${req.method} to URI:${req.path} using notes.html handler`);
+  app.get("/notes*", function(req, res) {
     res.sendFile(Path.join(__dirname, "../notes.html"));
   });
 
-  app.get("*.html", function(req, res) {
-    console.log(`Received ${req.method} to URI:${req.path} using default handler`);
+  app.get("*", function(req, res) {
     res.sendFile(Path.join(__dirname, "../index.html"));
   });
 };
